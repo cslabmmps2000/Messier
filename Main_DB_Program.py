@@ -1,32 +1,39 @@
 import sqlite3 as sql
 import time
+import getpass
+import os
 
-db = sql.connect("The_Messier_Dualis_Database")
+os.chdir(f"C:/Users/{getpass.getuser()}/Messier")
+db = sql.connect("The_Messier_Dualis_Database.db")
 
-def CreateTable(tablename):
+def CreateTable():
+    tabname = str(input("Enter the Table name that you wish to create: "))
     cursor = db.cursor()
     create_table = f'''
-    CREATE TABLE {tablename} (
+    CREATE TABLE {tabname} (
         Messier_Number TEXT PRIMARY KEY,
         Name TEXT,
         Distance INTEGER,
         Discovery_Date TEXT,
+        Discoverer TEXT,
         Object_Type TEXT,
         Constellation TEXT,
         Apparent_Magnitude REAL,
-        Description TEXT
+        Description TEXT,
+        Fun_Fact TEXT,
+        Image_File TEXT
     );
     '''
     
     cursor.execute(create_table)
     db.commit()
 
-def UpdateTable(tablename, messier, name, dist, date, types, const, mag, desc):
+def UpdateTable(tablename, messier, name, dist, date, discoverer, types, const, mag, desc, fun, img):
     cursor = db.cursor()
     
     update_table = f'''INSERT INTO {tablename}
-    ( Messier_Number, Name, Distance, Discovery_Date, Object_Type, Constellation, Apparent_Magnitude, Description)
-    VALUES ({messier}, {name}, {dist}, {date}, {types}, {const}, {mag}, {desc});
+    (Messier_Number, Name, Distance, Discovery_Date, Discoverer, Object_Type, Constellation, Apparent_Magnitude, Description, Fun_Fact, Image_File)
+    VALUES ({messier}, {name}, {dist}, {date}, {discoverer}, {types}, {const}, {mag}, {desc}, {fun}, {img});
     '''
 
     cursor.execute(update_table)
@@ -59,21 +66,22 @@ while(True):
     time.sleep(0.5)
     
     if (inp == 1):
-        tabname = str(input("Enter the Table name that you wish to create: "))
-        CreateTable(tabname)
+        CreateTable()
         time.sleep(1)
-        print("Table Created!")
+        print("Table Created! :D")
     
     elif (inp == 2):
-        tabname = str(input("Enter the Table name that you wish to edit in: "))
-        time.sleep(0.6)
+        username = getpass.getuser()
+        Tablename = str(input("Enter the Table name that you wish to create: "))
         mesname = str(input("Please enter the Messier Number: "))
         time.sleep(0.6)
         objname = str(input("Enter the Name of the Messier Object: "))
         time.sleep(0.6)
         dist = int(input("Please enter the Distance of the Messier Object from Earth in Light-Years: "))
         time.sleep(0.6)
-        objdate = str(input("Enter theDate that the object was discovered in (Format: DD-MM-YYYY): "))
+        objdate = str(input("Enter the Date that the object was discovered in (Format: YYYY): "))
+        time.sleep(0.6)
+        objdisc = str(input("Enter the Full Name of the Discoverer of the Messier Object: "))
         time.sleep(0.6)
         objtype = str(input("Please enter the Type of the Messier Object: "))
         time.sleep(0.6)
@@ -83,18 +91,23 @@ while(True):
         time.sleep(0.6)
         desc = str(input("Please enter a short Description of the Messier Object: "))
         time.sleep(0.6)
-        UpdateTable(tabname, mesname, objname, dist, objdate, objtype, constname, apmag, desc)
+        funfac = str(input("Please enter a short Fun Fact about the Messier Object: "))
+        time.sleep(0.6)
+        img = str(input("Please enter the Filename of the Image of the Messier Object: "))
+        time.sleep(0.6)
+        img2 = f"C:/Users/{username}/Messier/Image Files/" + {img}
+        UpdateTable(Tablename, mesname, objname, dist, objdate, objdisc, objtype, constname, apmag, desc, funfac, img2)
         time.sleep(1)
-        print("Table Updated!")
+        print("Table Updated! :D")
 
     elif (inp == 3):
         tabname = str(input("Enter the Table name that you wish to edit in: "))
         time.sleep(0.6)
         mesname = str(input("Please enter the Messier Number of the record: "))
         time.sleep(0.6)
-        DelRow(tabname, mesname)
+        DelRow(Tablename, mesname)
         time.sleep(1)
-        print("Edition Complete!")
+        print("Editing Complete! :D")
         
     elif (inp == 4):
         print("Exiting!...")
