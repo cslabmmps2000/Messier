@@ -1,11 +1,10 @@
 import sqlite3 as sql
 import time
 
-db = sql.connect("TheMessierDatabase")
-cursor = db.cursor()
+db = sql.connect("The_Messier_Dualis_Database")
 
 def CreateTable(tablename):
-    
+    cursor = db.cursor()
     create_table = f'''
     CREATE TABLE {tablename} (
         Messier_Number TEXT PRIMARY KEY,
@@ -32,7 +31,14 @@ def UpdateTable(tablename, messier, name, dist, date, types, const, mag, desc):
 
     cursor.execute(update_table)
     db.commit()
-    db.close()
+
+def DelRow(tablename, messier):
+    cursor = db.cursor()
+    
+    del_row = f"DELETE FROM {tablename} WHERE Messier_Number = {messier};"
+
+    cursor.execute(del_row)
+    db.commit()
 
 start_time = time.time()
 print("Program Starting...")
@@ -82,4 +88,17 @@ while(True):
         print("Table Updated!")
 
     elif (inp == 3):
-        pass
+        tabname = str(input("Enter the Table name that you wish to edit in: "))
+        time.sleep(0.6)
+        mesname = str(input("Please enter the Messier Number of the record: "))
+        time.sleep(0.6)
+        DelRow(tabname, mesname)
+        time.sleep(1)
+        print("Edition Complete!")
+        
+    elif (inp == 4):
+        print("Exiting!...")
+        time.sleep(1)
+        break
+    
+db.close()
