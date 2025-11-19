@@ -1,6 +1,9 @@
 import sqlite3 as sql
 import time
+import os
 
+dir = str(input("Please enter the Directory location of the Project Folder: "))
+os.chdir(dir)
 db = sql.connect("The_Messier_Dualis_Database.db")
 
 def CreateTable():
@@ -129,8 +132,8 @@ while(True):
         time.sleep(0.6)
         img = str(input("Please enter the Filename of the Image of the Messier Object: "))
         time.sleep(0.6)
-        
-        UpdateTable(Tablename, mesname, objname, dist, objdate, objdisc, objtype, constname, apmag, desc, funfac, img)
+        img2 = dir + '/' + "Image Files/" + img
+        UpdateTable(Tablename, mesname, objname, dist, objdate, objdisc, objtype, constname, apmag, desc, funfac, img2)
         time.sleep(1)
         print("Table Updated! :D")
 
